@@ -7,9 +7,31 @@ from datetime import datetime
 import webbrowser
 from openai import OpenAI
 import webbrowser
-
+import subprocess
+import sys
 
 latest_keyword_path = None
+
+# ==============================
+# 🔁 네이버 태그 자동화함수
+# ==============================
+def run_naver_tag_paster():
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        script_path = os.path.join(
+            base_dir,
+            "sgc_blog_auto_260109",
+            "content_studio_h2_fx.py"
+        )
+
+        subprocess.Popen(
+            [sys.executable, script_path],
+            cwd=os.path.dirname(script_path)
+        )
+
+    except Exception as e:
+        messagebox.showerror("에러", f"태그 자동 입력 실행 실패\n\n{e}")
+
 
 # ==============================
 # 🔁 FX 중복 방지 회전 규칙 (전역 상수)
@@ -884,7 +906,7 @@ def open_naver_blog():
 # ==============================
 root = tk.Tk()
 root.title("SGC HTML + h2별 FX 프롬프트 자동 생성기")
-root.geometry("980x720")
+root.geometry("1200x860")
 
 top_frame = tk.Frame(root)
 top_frame.pack(pady=10)
@@ -928,6 +950,12 @@ tk.Button(btn_frame, text="HTML 열기", command=lambda: open_file(latest_html_p
 tk.Button(btn_frame, text="FX 파일 열기", command=lambda: open_file(latest_fx_path), width=16).grid(row=0, column=4, padx=6)
 tk.Button(btn_frame, text="제목+태그 열기",command=open_meta_file, width=16).grid(row=0, column=6, padx=6)
 tk.Button(btn_frame, text="FX 결과 복사", command=copy_fx_to_clipboard, width=16).grid(row=0, column=2, padx=6)
+tk.Button(
+    btn_frame,
+    text="네이버 태그 자동 입력",
+    command=run_naver_tag_paster,
+    width=18
+).grid(row=1, column=3, padx=6, pady=6)
 
 tk.Label(root, text="h2 섹션별 FX 프롬프트 결과").pack(pady=6)
 
